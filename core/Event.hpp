@@ -1,12 +1,25 @@
 #include <string>
 #include <stdexcept>
 
+enum class Category {
+    WORK,
+    STUDY,
+    PERSONAL,
+    HEALTH,
+    OTHER
+};
+
 class Event{
     int id, time_stamp;
-    std::string category, description;
+    Category category;
+    std::string description;
     
     public:
-        Event(int id, int time_stamp, std::string category, std::string description){
+        Event(){
+            //default constractur
+        }
+
+        Event(int id, int time_stamp, Category category, std::string description = ""){
             set_id(id);
             set_time_stamp(time_stamp);
             set_category(category);
@@ -21,8 +34,7 @@ class Event{
             if(time_stamp < 0) throw std::invalid_argument("time_stamp can't be negative");
             this->time_stamp = time_stamp;
         }
-        void set_category(const std::string& category){
-            if(category.empty()) throw std::invalid_argument("category can't be empty");
+        void set_category(const Category){
             this->category = category;
         }
         void set_description(const std::string& description){
@@ -32,6 +44,6 @@ class Event{
         //getters:
         int get_id() const { return id; }
         int get_time_stamp() const { return time_stamp; }
-        const std::string& get_category() const { return category; }
+        const Category get_category() const { return category; }
         const std::string& get_description() const { return description; }
 };
