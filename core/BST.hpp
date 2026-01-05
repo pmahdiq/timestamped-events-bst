@@ -1,9 +1,11 @@
 #include <iostream>
+#include <vector>
 #include "Node.hpp"
 
 class BST{
     Node *root;
 
+    //helpers
     Node* insert_helper(Node* node, Event event) {
         if (node == nullptr) return new Node(event);
 
@@ -80,7 +82,21 @@ class BST{
             inorder_helper(root->get_right());
     }
 
+    void get_events_between_helper(Node* root, int t1, int t2, std::vector<Event>& result) {
+        if (!root) return;
+
+        get_events_between_helper(root->get_left(), t1, t2, result);
+
+        int ts = root->get_data().get_time_stamp();
+        if (ts >= t1 && ts <= t2)
+            result.push_back(root->get_data());
+
+        get_events_between_helper(root->get_right(), t1, t2, result);
+}
+
+
     public:
+        //constractur
         BST(Node *root = nullptr){
             this->root = root;
         }
@@ -95,6 +111,7 @@ class BST{
             return root;
         }
 
+        //basic methods
         void insert(Event event){
             root = insert_helper(root, event);
         }
@@ -121,4 +138,66 @@ class BST{
             inorder_helper(root);
             std::cout << std::endl;          
         }
-};
+
+        //practical methods
+        std::vector<Event> get_events_between(int t1, int t2) {
+            std::vector<Event> result;
+
+            get_events_between_helper(root, t1, t2, result);
+            return result;
+        }
+
+        Event get_closest_event(int t){
+            if(!root){
+                std::invalid_argument("BST has no root");
+            }
+            
+            Node* pre;
+            Node* curr = root;
+
+            while(!curr && curr->get_data().get_time_stamp() == t){
+                int ts = curr->get_data().get_time_stamp();
+
+                if(ts < t){
+                    pre = curr;
+                    curr = curr->get_right();
+                }
+
+                else{
+                    pre = curr;
+                    curr = curr->get_left();
+                }
+            }
+
+            if(curr->get_data().get_time_stamp() == t){
+                Event l,r,p,c;
+                c = curr->get_data();
+                if(curr->get_left()){
+                    l = curr->get_left()->get_data();
+                }
+                if(curr->get_right()){
+                    r = curr->get_right()->get_data();
+                }
+                p = pre->get_data();
+
+                Event canditate[3] = {r ,l, p};
+                int min = abs(c.get_time_stamp() - r.get_time_stamp());
+                int i = 0;
+                for(int x = 0;x < 3;x++){
+                   if(abs(t - canditate[x].get_time_stamp()) < min){
+                    i = x;
+                   } 
+                }
+
+            return canditate[i];
+            }
+            else{
+                std::cout << "failure to find t";
+                return Event();
+            }
+        }
+        
+        std::string count_category(int t1,int t2){
+    
+        }
+    };
