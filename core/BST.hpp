@@ -1,5 +1,8 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
+#include <map>
 #include "Node.hpp"
 
 class BST{
@@ -197,7 +200,27 @@ class BST{
             }
         }
         
-        std::string count_category(int t1,int t2){
-    
+        void countCategory(long long t1, long long t2) {
+            std::vector<Event> events = get_events_between(t1, t2);
+
+            // initialize counts
+            std::map<Category, int> cnt;
+            cnt[Category::HEALTH] = 0;
+            cnt[Category::OTHER] = 0;
+            cnt[Category::PERSONAL] = 0;
+            cnt[Category::STUDY] = 0;
+            cnt[Category::WORK] = 0;
+
+            for (Event e : events) {
+                cnt[e.get_category()]++;
+            }
+
+            // print
+            std::cout << "Category A = " << cnt[Category::HEALTH] << '\n';
+            std::cout << "Category B = " << cnt[Category::OTHER] << '\n';
+            std::cout << "Category C = " << cnt[Category::PERSONAL] << '\n';
+            std::cout << "Category D = " << cnt[Category::STUDY] << '\n';
+            std::cout << "Category E = " << cnt[Category::WORK] << '\n';
         }
+
     };
