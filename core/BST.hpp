@@ -7,6 +7,7 @@
 
 class BST{
     Node *root;
+    int count_of_inserts, count_of_deletes, event_id_counter = 0;
 
     //helpers
     Node* insert_helper(Node* node, Event event) {
@@ -109,14 +110,45 @@ class BST{
             root = r;
         }
 
+        void set_count_insert(int count){
+            if (count < 0) std::invalid_argument("Count of inserts can't be negetive");
+
+            else count_of_inserts = count;
+        }
+
+        void set_count_delete(int count){
+            if (count < 0) std::invalid_argument("Count of deletes can't be negetive");
+
+            else count_of_deletes = count;
+        }
+
+        void set_event_id_counter(int id){
+            if (id < 0) std::invalid_argument("Event id can't be empty!");
+            
+            else event_id_counter = id;
+        }
+
         //getters:
         Node* get_root(){
             return root;
         }
 
+        int get_count_insert(){
+            return count_of_inserts;
+        }
+
+        int get_count_delete(){
+            return count_of_deletes;
+        }
+
+        int get_event_id_counter(){
+            return event_id_counter;
+        }
+
         //basic methods
         void insert(Event event){
             root = insert_helper(root, event);
+            count_of_inserts++;
         }
 
         Event search_by_time_stamp(int val){
@@ -135,6 +167,7 @@ class BST{
             bool found = false;
             root = delete_helper(root, val, found);
             if(!found) std::cout << "Value not found in the tree.\n";
+            else    count_of_deletes++;
         }
 
         void inorder_print(){
@@ -200,7 +233,7 @@ class BST{
             }
         }
         
-        void countCategory(long long t1, long long t2) {
+        void count_category(int t1, int t2) {
             std::vector<Event> events = get_events_between(t1, t2);
 
             // initialize counts

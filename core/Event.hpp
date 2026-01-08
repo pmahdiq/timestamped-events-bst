@@ -1,7 +1,6 @@
 #pragma once
 
-
-#include <string>
+#include <iostream>
 #include <stdexcept>
 
 enum class Category {
@@ -15,7 +14,7 @@ enum class Category {
 class Event{
     int id, time_stamp;
     Category category;
-    std::string description;
+    std::string discription;
     
     public:
         Event(){
@@ -41,12 +40,20 @@ class Event{
             this->category = category;
         }
         void set_description(const std::string& description){
-            this->description = description;
+            this->discription = description;
         }
 
         //getters:
         int get_id() const { return id; }
         int get_time_stamp() const { return time_stamp; }
         const Category get_category() const { return category; }
-        const std::string& get_description() const { return description; }
+        const std::string& get_description() const { return discription; }
+
+        //methods
+        void print(){
+            std::cout << "event id : " << id << std::endl;
+            std::cout << "event category : " << static_cast<int>(category) << std::endl; //can use mapping for printing as string
+            std::cout << "time stamp: " << time_stamp << std::endl;
+            std::cout << "discription : " << discription << std::endl;
+        }
 };
